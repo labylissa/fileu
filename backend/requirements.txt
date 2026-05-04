@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+sqlalchemy[async]
+psycopg2-binary
+alembic
+python-jose
+passlib
