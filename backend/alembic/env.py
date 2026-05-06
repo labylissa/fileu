@@ -1,4 +1,6 @@
 import asyncio
+import sys
+import os
 from logging.config import fileConfig
 
 from sqlalchemy import pool
@@ -7,17 +9,18 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-# Import settings and models
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+# Add /app to path so "backend.app.*" imports work inside container
+sys.path.insert(0, "/app")
+# Also add parent of alembic dir for local dev
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from backend.app.core.config import settings
 from backend.app.db.base import Base
-import backend.app.models.user  # noqa — registers all models
+import backend.app.models.user      # noqa
+import backend.app.models.property  # noqa
 
 config = context.config
 
-# Override sqlalchemy.url from settings
 db_url = settings.DATABASE_URL
 if db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
