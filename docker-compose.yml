@@ -3,16 +3,19 @@ version: '3.8'
 services:
   backend:
     build:
-      context: ./backend
-      dockerfile: ../docker/Dockerfile.backend
+      context: .
+      dockerfile: docker/Dockerfile.backend
     ports:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/fileu
-      - JWT_SECRET_KEY=your_jwt_secret_key
+      - JWT_SECRET_KEY=change_me_in_production_use_a_long_random_string
       - STRIPE_API_KEY=your_stripe_api_key
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
 
   frontend:
     build:
@@ -22,18 +25,25 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     environment:
-      - VITE_API_URL=http://backend:8000
-      - HOST=0.0.0.0
+      - VITE_API_URL=http://localhost:8000
 
   db:
-    image: postgres:latest
+    image: postgres:16-alpine
     environment:
       - POSTGRES_DB=fileu
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
     volumes:
       - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   pgadmin:
     image: dpage/pgadmin4
