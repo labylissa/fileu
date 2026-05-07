@@ -26,4 +26,4 @@ class User(Base):
 
     # Relations (defined in property.py)
     properties = relationship("Property", back_populates="owner", foreign_keys="Property.owner_id")
-    contracts_as_tenant = relationship("Contract", back_populates="tenant", foreign_keys="Contract.tenant_id")
+

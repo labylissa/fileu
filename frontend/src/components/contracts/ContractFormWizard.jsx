@@ -26,7 +26,7 @@ const PAYMENT_METHODS = ["virement", "prélèvement", "chèque", "espèces", "au
 
 const STEP_FIELDS = {
   1: ["tenant_firstname", "tenant_lastname", "tenant_email"],
-  2: ["property_id", "contract_type", "start_date", "rent_amount"],
+  2: ["property_id", "contract_type", "start_date"],
   3: ["rent_amount"],
   4: [],
 };

@@ -122,6 +122,22 @@ async def create_contract(
     if contract.status == ContractStatus.actif:
         prop.status = PropertyStatus.loue
 
+    # Créer automatiquement un compte locataire s'il n'existe pas déjà
+    from backend.app.core.security import get_password_hash
+    from backend.app.models.user import Role
+    existing_tenant = await db.execute(
+        select(User).where(User.email == body.tenant_email)
+    )
+    if not existing_tenant.scalar_one_or_none():
+        import secrets, string
+        tmp_pwd = "".join(secrets.choice(string.ascii_letters + string.digits) for _ in range(12))
+        tenant_user = User(
+            email=body.tenant_email,
+            hashed_password=get_password_hash(tmp_pwd),
+            role=Role.locataire,
+        )
+        db.add(tenant_user)
+
     await db.commit()
 
     # Recharger avec relation
@@ -232,3 +248,21 @@ async def delete_contract(
 
     await db.delete(contract)
     await db.commit()
+
+
+# ── Endpoint locataire : voir ses propres contrats ────────────────────────────
+
+@router.get("/me/tenant", response_model=List[ContractSummary])
+async def list_my_contracts_as_tenant(
+    db:           AsyncSession = Depends(get_db),
+    current_user: User         = Depends(get_current_user),
+):
+    """Un locataire récupère les contrats associés à son email."""
+    q = (
+        select(Contract)
+        .where(Contract.tenant_email == current_user.email)
+        .options(selectinload(Contract.property))
+        .order_by(Contract.created_at.desc())
+    )
+    result = await db.execute(q)
+    return result.scalars().all()

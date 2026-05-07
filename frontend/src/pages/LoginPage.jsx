@@ -15,8 +15,12 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
-      await login(form.email, form.password);
-      navigate("/properties");
+      const user = await login(form.email, form.password);
+      if (user.role === "locataire") {
+        navigate("/tenant/dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       setError(err.response?.data?.detail ?? "Identifiants incorrects");
     } finally {

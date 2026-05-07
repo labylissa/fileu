@@ -1,18 +1,24 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { Home, Building2, FileText, Wallet, Bell, LogOut, User } from "lucide-react";
+import { Home, Building2, FileText, Wallet, LogOut, User } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 import { clsx } from "clsx";
 
-const NAV = [
-  { to: "/dashboard", icon: Home, label: "Tableau de bord" },
+const NAV_BAILLEUR = [
+  { to: "/dashboard",  icon: Home,      label: "Tableau de bord" },
   { to: "/properties", icon: Building2, label: "Mes biens" },
-  { to: "/contracts", icon: FileText, label: "Contrats" },
-  { to: "/finances", icon: Wallet, label: "Finances" },
+  { to: "/contracts",  icon: FileText,  label: "Contrats" },
+  { to: "/finances",   icon: Wallet,    label: "Finances" },
+];
+
+const NAV_LOCATAIRE = [
+  { to: "/dashboard",   icon: Home,     label: "Tableau de bord" },
+  { to: "/mon-contrat", icon: FileText, label: "Mon contrat" },
 ];
 
 export default function AppLayout({ children }) {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const NAV = user?.role === "locataire" ? NAV_LOCATAIRE : NAV_BAILLEUR;
 
   const handleLogout = () => {
     logout();
@@ -54,6 +60,20 @@ export default function AppLayout({ children }) {
             </NavLink>
           ))}
         </nav>
+
+        {/* Rôle badge */}
+        {user?.role && (
+          <div className="px-4 py-2">
+            <span className={clsx(
+              "text-xs font-medium px-2.5 py-1 rounded-full",
+              user.role === "bailleur"  && "bg-blue-100 text-blue-700",
+              user.role === "locataire" && "bg-green-100 text-green-700",
+              user.role === "admin"     && "bg-purple-100 text-purple-700",
+            )}>
+              {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+            </span>
+          </div>
+        )}
 
         {/* User */}
         <div className="px-3 py-4 border-t border-gray-100">

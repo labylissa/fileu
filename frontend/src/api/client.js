@@ -81,10 +81,11 @@ export const propertiesApi = {
 
 // ── Contracts ─────────────────────────────────────────────────────────────────
 export const contractsApi = {
-  list:     (params) => api.get("/contracts", { params }),
-  get:      (id)     => api.get(`/contracts/${id}`),
-  create:   (data)   => api.post("/contracts", data),
-  update:   (id, data) => api.patch(`/contracts/${id}`, data),
-  resilier: (id)     => api.post(`/contracts/${id}/resilier`),
-  delete:   (id)     => api.delete(`/contracts/${id}`),
+  list:        (params)    => api.get("/contracts", { params }),
+  listTenant:  ()          => api.get("/contracts/me/tenant"),
+  get:         (id)        => api.get(`/contracts/${id}`),
+  create:      (data)      => api.post("/contracts", data),
+  update:      (id, data)  => api.patch(`/contracts/${id}`, data),
+  resilier:    (id)        => api.post(`/contracts/${id}/resilier`),
+  delete:      (id)        => api.delete(`/contracts/${id}`),
 };
