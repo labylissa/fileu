@@ -5,7 +5,8 @@ import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import PropertiesPage from "./pages/PropertiesPage.jsx";
-import { ContractsPage, FinancesPage } from "./pages/PlaceholderPages.jsx";
+import ContractsPage from "./pages/ContractsPage.jsx";
+import { FinancesPage } from "./pages/PlaceholderPages.jsx";
 
 export default function App() {
   return (

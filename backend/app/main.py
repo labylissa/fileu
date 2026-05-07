@@ -12,9 +12,11 @@ from backend.app.db.base import Base
 # Import all models so Base.metadata is complete
 import backend.app.models.user      # noqa
 import backend.app.models.property  # noqa
+import backend.app.models.contract  # noqa
 
 from backend.app.routers.auth import router as auth_router
 from backend.app.routers.properties import router as properties_router
+from backend.app.routers.contracts import router as contracts_router
 
 
 def _ensure_upload_dirs():
@@ -56,6 +58,7 @@ app.mount("/static", StaticFiles(directory=settings.UPLOAD_DIR), name="static")
 
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(properties_router, prefix="/api/v1/properties", tags=["properties"])
+app.include_router(contracts_router, prefix="/api/v1/contracts", tags=["contracts"])
 
 
 @app.get("/health")

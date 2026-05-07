@@ -141,22 +141,3 @@ class PropertyRoom(Base):
 
     property = relationship("Property", back_populates="rooms")
 
-
-# ── Contract — défini ici pour éviter les imports circulaires ─────────────────
-
-class Contract(Base):
-    __tablename__ = "contracts"
-
-    id = Column(Integer, primary_key=True, index=True)
-    property_id = Column(Integer, ForeignKey("properties.id"), nullable=False)
-    tenant_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    start_date = Column(Date, nullable=False)
-    end_date = Column(Date)
-    rent_amount = Column(Float, nullable=False)
-    deposit_amount = Column(Float)
-    status = Column(String, default="active")
-    contract_type = Column(String, default="meublé")
-    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
-
-    property = relationship("Property", back_populates="contracts")
-    tenant = relationship("User", back_populates="contracts_as_tenant", foreign_keys=[tenant_id])

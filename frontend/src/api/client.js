@@ -78,3 +78,13 @@ export const propertiesApi = {
   deleteRoom: (propertyId, roomId) =>
     api.delete(`/properties/${propertyId}/rooms/${roomId}`),
 };
+
+// ── Contracts ─────────────────────────────────────────────────────────────────
+export const contractsApi = {
+  list:     (params) => api.get("/contracts", { params }),
+  get:      (id)     => api.get(`/contracts/${id}`),
+  create:   (data)   => api.post("/contracts", data),
+  update:   (id, data) => api.patch(`/contracts/${id}`, data),
+  resilier: (id)     => api.post(`/contracts/${id}/resilier`),
+  delete:   (id)     => api.delete(`/contracts/${id}`),
+};
