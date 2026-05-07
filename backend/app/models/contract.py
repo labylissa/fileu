@@ -46,7 +46,7 @@ class Contract(Base):
     cotenants           = Column(JSON, default=list)
 
     # ── Durée & type ──────────────────────────────────────────────────────────
-    contract_type   = Column(SAEnum(ContractType), nullable=False,
+    contract_type   = Column(SAEnum(ContractType, name="contracttype", create_type=False), nullable=False,
                              default=ContractType.meuble)
     start_date      = Column(Date, nullable=False)
     end_date        = Column(Date)                # None = bail illimité / CDI
@@ -69,7 +69,7 @@ class Contract(Base):
     internal_notes  = Column(Text)
 
     # ── Statut ────────────────────────────────────────────────────────────────
-    status          = Column(SAEnum(ContractStatus), default=ContractStatus.actif,
+    status          = Column(SAEnum(ContractStatus, name="contractstatus", create_type=False), default=ContractStatus.actif,
                              nullable=False)
 
     # ── Dates système ─────────────────────────────────────────────────────────

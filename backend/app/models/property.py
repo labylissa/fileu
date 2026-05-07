@@ -48,7 +48,7 @@ class Property(Base):
     city = Column(String, nullable=False)
     zip_code = Column(String, nullable=False)
 
-    property_type = Column(SAEnum(PropertyType), nullable=False)
+    property_type = Column(SAEnum(PropertyType, name="propertytype", create_type=False), nullable=False)
     surface = Column(Float, nullable=False)
     num_rooms = Column(Integer)
     num_bedrooms = Column(Integer)
@@ -61,9 +61,9 @@ class Property(Base):
     has_garden = Column(Boolean, default=False)
     is_furnished = Column(Boolean, default=False)
 
-    dpe_class = Column(SAEnum(DPEClass))
+    dpe_class = Column(SAEnum(DPEClass, name="dpeclass", create_type=False))
     dpe_value = Column(Float)
-    ges_class = Column(SAEnum(DPEClass))
+    ges_class = Column(SAEnum(DPEClass, name="dpeclass", create_type=False))
     ges_value = Column(Float)
 
     rent_price = Column(Float, nullable=False)
@@ -73,7 +73,7 @@ class Property(Base):
     description = Column(Text)
     internal_notes = Column(Text)
 
-    status = Column(SAEnum(PropertyStatus), default=PropertyStatus.disponible, nullable=False)
+    status = Column(SAEnum(PropertyStatus, name="propertystatus", create_type=False), default=PropertyStatus.disponible, nullable=False)
 
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc),
@@ -131,7 +131,7 @@ class PropertyRoom(Base):
     id = Column(Integer, primary_key=True, index=True)
     property_id = Column(Integer, ForeignKey("properties.id"), nullable=False)
 
-    room_type = Column(SAEnum(RoomType), nullable=False)
+    room_type = Column(SAEnum(RoomType, name="roomtype", create_type=False), nullable=False)
     name = Column(String)
     surface = Column(Float)
     items = Column(JSON, default=list)
